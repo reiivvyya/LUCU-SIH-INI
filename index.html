@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Amel ♡</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:linear-gradient(135deg,#fff0f6,#ffe0ed,#fff7fa);
+ color:#75465b;
+ font-family:"Trebuchet MS",Arial,sans-serif;
+ text-align:center;
+ overflow-x:hidden;
+}
+.screen{
+ min-height:100vh;
+ display:none;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ padding:25px 16px;
+ animation:pop .5s;
+}
+#home{display:flex}
+@keyframes pop{
+ from{opacity:0;transform:scale(.94)}
+ to{opacity:1;transform:scale(1)}
+}
+.card{
+ width:min(100%,480px);
+ background:#fffafd;
+ border:3px solid #ffc5dc;
+ border-radius:30px;
+ padding:27px 19px;
+ box-shadow:0 10px 0 #f8c1d8,0 15px 30px #e9a9c5;
+}
+h1{color:#e77da9;font-size:29px}
+h2{color:#e77da9}
+p{line-height:1.7}
+button{
+ background:#ffacd0;
+ color:#7c3f5c;
+ border:2px solid #fff;
+ border-radius:18px;
+ padding:13px 19px;
+ font-size:15px;
+ font-weight:bold;
+ margin:7px;
+ box-shadow:0 5px 0 #df80aa;
+ cursor:pointer;
+ transition:.2s;
+}
+button:active{transform:translateY(4px);box-shadow:none}
+button:hover{transform:scale(1.06)}
+button:disabled{opacity:.5;cursor:default}
+.character{
+ font-size:95px;
+ animation:bounce 1.5s infinite;
+}
+@keyframes bounce{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-12px)}
+}
+.sticker{
+ position:fixed;
+ pointer-events:none;
+ font-size:24px;
+ animation:float 5s linear infinite;
+ z-index:2;
+}
+@keyframes float{
+ from{transform:translateY(100vh) rotate(0deg);opacity:0}
+ 15%{opacity:1}
+ to{transform:translateY(-100px) rotate(360deg);opacity:0}
+}
+.small{font-size:13px;color:#bd7e9b}
+#gameArea{
+ position:relative;
+ height:300px;
+ width:100%;
+ background:#fff0f6;
+ border:2px dashed #f5a8c9;
+ border-radius:20px;
+ overflow:hidden;
+}
+.catch{
+ position:absolute;
+ font-size:34px;
+ background:none;
+ border:none;
+ box-shadow:none;
+ padding:0;
+ margin:0;
+}
+#score{font-size:24px;color:#e77da9}
+#giftBox{
+ font-size:100px;
+ cursor:pointer;
+}
+.message{
+ text-align:left;
+ line-height:1.9;
+ color:#8d5b70;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIK -->
+<audio id="music" src="ssstik.io_1793715053005.mp3" preload="auto" loop></audio>
+
+<!-- HOME -->
+<section class="screen" id="home">
+ <div class="card">
+  <div class="character">🐱</div>
+  <h1>HALOOOO AMELLL!!</h1>
+  <p>Ada seekor kucing kecil yang mau menyampaikan sesuatu...</p>
+  <p>Katanya kamu manusia paling lucu sedunia. 😭💗</p>
+  <h2>MAU DENGERIN NGGAK?</h2>
+  <button onclick="start()">MAUUU!! 💗</button>
+  <button onclick="nope()">NGGAK MAU 🙄</button>
+  <p class="small">psst... kucingnya udah nunggu dari tadi.</p>
+ </div>
+</section>
+
+<!-- WELCOME -->
+<section class="screen" id="welcome">
+ <div class="card">
+  <div class="character">🐻‍❄️</div>
+  <h1>YEAAYYY!!</h1>
+  <p>Beruang ini seneng banget kamu datang!!</p>
+  <p>Dia punya beberapa misi kecil buat kamu.</p>
+  <button onclick="show('mission')">LIHAT MISINYA 🎀</button>
+ </div>
+</section>
+
+<!-- MENU -->
+<section class="screen" id="mission">
+ <div class="card">
+  <div class="character">🐰</div>
+  <h1>AMEL'S LITTLE MISSIONS</h1>
+  <p>Selamat datang di dunia kecil penuh kelucuan.</p>
+  <button onclick="show('game')">🎮 GAME TANGKAP HATI</button>
+  <button onclick="resetQuiz();show('quiz')">🧠 KUIS RANDOM</button>
+  <button onclick="show('hug')">🧸 PELUK VIRTUAL</button>
+  <button onclick="show('random')">💌 PESAN RANDOM</button>
+  <button onclick="show('gift')">🎁 HADIAH RAHASIA</button>
+  <button onclick="show('letter')">💗 SURAT UNTUK AMEL</button>
+ </div>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="game">
+ <div class="card">
+  <h1>TANGKAP HATINYA!! 💗</h1>
+  <p>Pencet hati yang muncul sampai dapat 10!</p>
+  <div id="score">0 / 10</div>
+  <div id="gameArea"></div>
+  <p id="gameMessage">AYO AMELLL!!</p>
+  <button onclick="startGame()">MULAI / ULANGI 🎮</button>
+  <button onclick="show('mission')">KEMBALI</button>
+ </div>
+</section>
+
+<!-- QUIZ -->
+<section class="screen" id="quiz">
+ <div class="card">
+  <div class="character">🐸</div>
+  <h1>KUIS SUPER PENTING</h1>
+  <p id="quizQuestion"></p>
+  <div id="quizOptions"></div>
+  <p id="quizResult"></p>
+  <button id="nextQuiz" style="display:none" onclick="nextQuestion()">LANJUT ➜</button>
+  <button onclick="show('mission')">KEMBALI</button>
+ </div>
+</section>
+
+<!-- HUG -->
+<section class="screen" id="hug">
+ <div class="card">
+  <div class="character" id="bear">🧸</div>
+  <h1>VIRTUAL HUG!!</h1>
+  <p>Beruangnya mau kasih pelukan virtual buat Amel.</p>
+  <button onclick="hug()">PELUKKKK!! 🫂</button>
+  <p id="hugText">Tekan tombolnya dulu yaaa.</p>
+  <button onclick="show('mission')">KEMBALI</button>
+ </div>
+</section>
+
+<!-- RANDOM -->
+<section class="screen" id="random">
+ <div class="card">
+  <div class="character">🐣</div>
+  <h1>MESIN PESAN RANDOM</h1>
+  <p>Tekan tombol untuk mendapatkan pesan rahasia.</p>
+  <h2 id="randomText">???</h2>
+  <button onclick="randomMessage()">KELUARKAN PESAN 💌</button>
+  <button onclick="show('mission')">KEMBALI</button>
+ </div>
+</section>
+
+<!-- GIFT -->
+<section class="screen" id="gift">
+ <div class="card">
+  <h1>HADIAH RAHASIA UNTUK AMEL</h1>
+  <p>Katanya ada sesuatu di dalam kotak ini...</p>
+  <div id="giftBox" onclick="openGift()">🎁</div>
+  <h2 id="giftText">PENCET KOTAKNYA!!</h2>
+  <button onclick="show('letter')">SURAT DARI GUE 💗</button>
+  <button onclick="show('mission')">KEMBALI</button>
+ </div>
+</section>
+
+<!-- LETTER -->
+<section class="screen" id="letter">
+ <div class="card">
+  <div class="character">💌</div>
+  <h1>DEAR AMEL...</h1>
+  <p class="message">
+   Hai, manusia kecil yang lucu. 💗<br><br>
+   Gue cuma mau bilang kalau kehadiran lo itu salah satu hal menyenangkan dalam hari-hari gue. Bahkan obrolan random dan candaan nggak jelas bisa jadi hal yang bikin gue seneng.<br><br>
+   Gue suka saat kita bisa cerita apa aja, ketawa bareng, saling dengerin, dan berbagi hal-hal kecil.<br><br>
+   Gue nggak minta semuanya selalu sempurna. Kita boleh punya hari yang berantakan, boleh capek, boleh punya pendapat berbeda. Yang penting kita tetap saling menghargai dan belajar memahami satu sama lain.<br><br>
+   Jangan lupa istirahat, makan, dan jangan terlalu keras sama diri sendiri, ya.<br><br>
+   Terima kasih sudah menjadi Amel yang punya tempat spesial di cerita gue.<br><br>
+   YOU ARE MY FAVORITE HUMAN!! 🧸💗<br>
+   LOVE YOUUU!!
+  </p>
+  <button onclick="show('ending')">AKHIRNYA... 🎀</button>
+ </div>
+</section>
+
+<!-- ENDING -->
+<section class="screen" id="ending">
+ <div class="card">
+  <div class="character">🐱💗</div>
+  <h1>CONGRATULATIONS AMEL!!</h1>
+  <p>Kamu berhasil menyelesaikan semua misi!</p>
+  <h2>AWARD: THE CUTEST HUMAN 🏆</h2>
+  <p>Hadiahmu adalah 1000000% kasih sayang dan satu beruang virtual.</p>
+  <button onclick="show('home')">MAIN LAGI ↻</button>
+ </div>
+</section>
+
+<script>
+function show(id){
+ document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
+ document.getElementById(id).style.display='flex';
+ window.scrollTo(0,0);
+}
+
+function start(){
+ show('welcome');
+ const music=document.getElementById('music');
+ music.play().catch(()=>{});
+}
+
+function nope(){
+ alert("EHHH KOK GITU 😭 KUCINGNYA SEDIH!");
+ const b=document.querySelector('#home button:last-of-type');
+ b.textContent="YA UDAH MAU DENGERIN 😭";
+}
+
+function floatStickers(){
+ const emojis=['💗','🎀','🐱','🐻','🌸','⭐','🧸'];
+ setInterval(()=>{
+  const el=document.createElement('div');
+  el.className='sticker';
+  el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+  el.style.left=Math.random()*100+'vw';
+  el.style.animationDuration=(3+Math.random()*4)+'s';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),7000);
+ },600);
+}
+floatStickers();
+
+// GAME TANGKAP HATI
+let score=0;
+let gameInterval=null;
+
+function startGame(){
+ score=0;
+ document.getElementById('score').textContent='0 / 10';
+ document.getElementById('gameMessage').textContent='TANGKAP HATINYA!!';
+ const area=document.getElementById('gameArea');
+ area.innerHTML='';
+ if(gameInterval)clearInterval(gameInterval);
+
+ gameInterval=setInterval(()=>{
+  if(score>=10){
+   clearInterval(gameInterval);
+   return;
+  }
+  const heart=document.createElement('button');
+  heart.className='catch';
+  heart.textContent=['💗','💖','💕','❤️'][Math.floor(Math.random()*4)];
+  heart.style.left=Math.random()*85+'%';
+  heart.style.top=Math.random()*80+'%';
+  heart.onclick=()=>{
+   score++;
+   document.getElementById('score').textContent=score+' / 10';
+   heart.remove();
+   if(score>=10){
+    clearInterval(gameInterval);
+    document.getElementById('gameMessage').textContent='YEAYYY AMEL MENANG!! 🏆';
+    alert('SELAMATTT!! KAMU DAPAT 10 HATI 💗');
+   }
+  };
+  area.appendChild(heart);
+  setTimeout(()=>heart.remove(),1300);
+ },650);
+}
+
+// KUIS
+let q=0;
+const qs=[
+ ['Siapa manusia paling lucu?',['AMEL!! 💗','Kucing oren','Alien'],'JAWABANNYA AMEL LAH 😭'],
+ ['Kalau dapat hadiah, pilih apa?',['Boneka 🧸','Cokelat 🍫','Bunga 🌷'],'SEMOGA DAPAT SEMUANYA!!'],
+ ['Kalau lagi bad mood, maunya apa?',['Ditemenin','Dikasih makanan','Dikasih waktu sendiri'],'SEMOGA SELALU ADA YANG MEMAHAMI KAMU 💗'],
+ ['Apa gelar resmi Amel?',['Ratu gemoy','CEO lucu','Manusia favorit'],'SEMUA BENAR TIDAK ADA DEBAT!!']
+];
+
+function resetQuiz(){
+ q=0;
+ renderQuiz();
+}
+
+function renderQuiz(){
+ document.getElementById('quizQuestion').textContent=qs[q][0];
+ const box=document.getElementById('quizOptions');
+ box.innerHTML='';
+ qs[q][1].forEach(a=>{
+  const b=document.createElement('button');
+  b.textContent=a;
+  b.onclick=answer;
+  box.appendChild(b);
+ });
+ document.getElementById('quizResult').textContent='';
+ document.getElementById('nextQuiz').style.display='none';
+}
+
+function answer(){
+ document.getElementById('quizResult').textContent=qs[q][2];
+ document.querySelectorAll('#quizOptions button').forEach(b=>b.disabled=true);
+ document.getElementById('nextQuiz').style.display='inline-block';
+}
+
+function nextQuestion(){
+ q++;
+ if(q>=qs.length){
+  document.getElementById('quizQuestion').textContent='KUIS SELESAI!!';
+  document.getElementById('quizOptions').innerHTML='';
+  document.getElementById('quizResult').textContent='AMEL MENDAPAT GELAR MANUSIA PALING GEMOY 🏆';
+  document.getElementById('nextQuiz').style.display='none';
+  return;
+ }
+ renderQuiz();
+}
+
+// PELUK VIRTUAL
+function hug(){
+ document.getElementById('bear').textContent='🐻‍❄️💗';
+ document.getElementById('hugText').textContent='PELUK VIRTUAL UNTUK AMELLL!! 🫂💗';
+}
+
+// PESAN RANDOM
+const messages=[
+ "AMEL JANGAN LUCU-LUCU TERUS, GUE ERROR 😭",
+ "KAMU MENDAPAT 1000 POIN KEGEMOYAN 🎀",
+ "KUCING INI RESMI JADI FANS KAMU 🐱",
+ "JANGAN LUPA SENYUM HARI INI 🌷",
+ "PENGUMUMAN: AMEL ADALAH MANUSIA FAVORIT 💗",
+ "TOLONG KEMBALIKAN HATI GUE, KAMU BAWA 😭",
+ "KAMU LUCU BANGET, INI BUKAN LATIHAN!!"
+];
+
+function randomMessage(){
+ document.getElementById('randomText').textContent=
+ messages[Math.floor(Math.random()*messages.length)];
+}
+
+// HADIAH
+function openGift(){
+ document.getElementById('giftBox').textContent='🧸';
+ document.getElementById('giftText').textContent='HADIAHNYA BERUANG BUAT AMEL!! 💗';
+}
+</script>
+
+</body>
+</html>
